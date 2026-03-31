@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connexion — Versets & Jardins</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --off-white: #F7F5F0;
+    --warm-black: #1A1814;
+    --muted: #8A8580;
+    --accent: #2C5F3F;
+    --border: #E0DDD8;
+  }
+  body {
+    background: var(--off-white);
+    color: var(--warm-black);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .card {
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 3rem;
+  }
+
+  .arabic {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    color: var(--accent);
+    margin-bottom: 2rem;
+    direction: rtl;
+  }
+
+  .status {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    margin-bottom: 1rem;
+  }
+
+  .status.success { color: var(--accent); }
+  .status.error { color: #8B3A3A; }
+
+  .message {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+  }
+
+  .code-box {
+    background: var(--warm-black);
+    color: var(--off-white);
+    padding: 1.5rem;
+    font-family: monospace;
+    font-size: 0.75rem;
+    word-break: break-all;
+    text-align: left;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  .instruction {
+    font-size: 0.8rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    text-align: left;
+    line-height: 1.7;
+  }
+
+  .btn-back {
+    display: inline-block;
+    padding: 0.85rem 2rem;
+    border: 1px solid var(--warm-black);
+    color: var(--warm-black);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    transition: all 0.2s ease;
+  }
+
+  .btn-back:hover {
+    background: var(--warm-black);
+    color: var(--off-white);
+  }
+
+  .divider {
+    width: 40px;
+    height: 1px;
+    background: var(--border);
+    margin: 2rem auto;
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="logo">Versets & Jardins</div>
+  <div class="arabic">بسم الله الرحمن الرحيم</div>
+
+  <div id="content">
+    <!-- Rempli par JS -->
+  </div>
+</div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get('code');
+  const error = params.get('error');
+  const content = document.getElementById('content');
+
+  if (error) {
+    content.innerHTML = `
+      <div class="status error">Autorisation refusée</div>
+      <p class="message">La connexion TikTok a été annulée ou refusée.<br>Authorization was denied or cancelled.</p>
+      <a href="/versets-jardins/" class="btn-back">← Retour / Back</a>
+    `;
+  } else if (code) {
+    const fullUrl = window.location.href;
+    content.innerHTML = `
+      <div class="status success">Autorisation reçue</div>
+      <p class="message">
+        TikTok a bien autorisé l'application.<br>
+        Copiez l'URL ci-dessous et collez-la dans le terminal.<br><br>
+        <em style="font-size:0.8rem;">Copy the URL below and paste it into your terminal.</em>
+      </p>
+      <div class="code-box">${fullUrl}</div>
+      <div class="instruction">
+        Dans votre terminal, collez cette URL complète lorsque le script <strong>tiktok_auth.py</strong> vous la demande.<br><br>
+        In your terminal, paste this full URL when <strong>tiktok_auth.py</strong> prompts you.
+      </div>
+      <div class="divider"></div>
+      <a href="/versets-jardins/" class="btn-back">← Retour / Back</a>
+    `;
+  } else {
+    content.innerHTML = `
+      <div class="status">Page de callback</div>
+      <p class="message">Cette page reçoit l'autorisation TikTok après connexion.<br>This page receives the TikTok authorization after login.</p>
+      <a href="/versets-jardins/" class="btn-back">← Retour / Back</a>
+    `;
+  }
+</script>
+
+</body>
+</html>
